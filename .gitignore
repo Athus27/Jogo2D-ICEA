@@ -1,0 +1,22 @@
+# Unity generated
+[Ll]ibrary/
+[Ll]ogs/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Mm]emoryCaptures/
+
+# User-specific
+[Uu]ser[Ss]ettings/
+
+# IDEs
+.vscode/
+.vs/
+*.csproj
+*.sln
+*.suo
+
+# OS
+.DS_Store
+Thumbs.db
