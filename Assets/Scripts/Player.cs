@@ -6,6 +6,8 @@ public class Player : MonoBehaviour
     [Header("Configurações do Pulo")]
     public float maxHeight = 1f;
     public float timeToPeak = 0.4f;
+    [Header("Spawn Position")]
+    // public Vector2 spawnPosition = new Vector2(0, 0); // Posição inicial
 
     [Header("Sprites")]
     public Sprite parado; // ARRASTE O FRAME_0 AQUI NO INSPECTOR
@@ -19,6 +21,9 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        // transform.position = spawnPosition;
+
+
         sr = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>(); // Pega o Animator automaticamente
@@ -37,6 +42,7 @@ public class Player : MonoBehaviour
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpSpeed);
         }
     }
+
 
     void MovePlayer()
     {

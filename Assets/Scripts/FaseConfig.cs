@@ -16,7 +16,7 @@ public class FaseConfig : ScriptableObject
     public float projectileSpeed = 8f;
 
     [Header("Ritmo do boss")]
-    public float shootInterval = 1.2f;
+    public float shootInterval = 0.2f;
 
     [Header("Dificuldade / tema")]
     public string nomeDaFase = "Fase";

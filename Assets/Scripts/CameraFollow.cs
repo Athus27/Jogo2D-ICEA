@@ -1,16 +1,29 @@
 using UnityEngine;
 
-
 public class CameraFollow : MonoBehaviour
 {
     public Transform Player;
-    public float minX, maxX;
-    public float minY, maxY;
+    public SpriteRenderer cenario;
 
+    private float minX, maxX, minY, maxY;
+    private float camHalfWidth, camHalfHeight;
 
     void Start()
     {
-        LateUpdate();
+        if (cenario != null)
+        {
+            Bounds limites = cenario.bounds;
+
+            minX = limites.min.x;
+            maxX = limites.max.x;
+            minY = limites.min.y;
+            maxY = limites.max.y;
+        }
+
+        Camera cam = GetComponent<Camera>();
+
+        camHalfHeight = cam.orthographicSize;
+        camHalfWidth = camHalfHeight * cam.aspect;
     }
 
     void LateUpdate()
@@ -19,17 +32,16 @@ public class CameraFollow : MonoBehaviour
 
         Vector3 novaPosicao = transform.position;
 
-        //eixo x 
-        novaPosicao.x = Player.position.x;
-        novaPosicao.x = Mathf.Clamp(novaPosicao.x, minX, maxX);
+        // X
+        float limiteMinX = minX + camHalfWidth;
+        float limiteMaxX = maxX - camHalfWidth;
+        novaPosicao.x = Mathf.Clamp(Player.position.x, limiteMinX, limiteMaxX);
 
-        //eixo y
-        novaPosicao.y = Player.position.y +1f; 
-        novaPosicao.y = Mathf.Clamp(novaPosicao.y, minY, maxY);
+        // Y
+        float limiteMinY = minY + camHalfHeight;
+        float limiteMaxY = maxY - camHalfHeight;
+        novaPosicao.y = Mathf.Clamp(Player.position.y + 1f, limiteMinY, limiteMaxY);
 
         transform.position = novaPosicao;
     }
-
 }
-
-
