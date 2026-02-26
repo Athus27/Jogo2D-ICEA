@@ -81,6 +81,12 @@ public class Player : MonoBehaviour
             {
                 isGrounded = true;
             }
+            if (collision.gameObject.CompareTag("Projetil"))
+            {
+                Destroy(collision.gameObject);  
+                Debug.Log("Player foi atingido pelo projétil!");
+            }
+            
         }
 
         private void OnCollisionExit2D(Collision2D collision)
