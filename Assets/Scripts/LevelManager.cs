@@ -1,19 +1,62 @@
 using UnityEngine;
+using TMPro;
 
 public class LevelManager : MonoBehaviour
 {
+    // A "porta de entrada" que o Player estava procurando:
+    public static LevelManager instance; 
+
     public FaseConfig faseAtual;
 
     [Header("Onde spawnar coisas")]
     public Transform backgroundParent;
     public Transform bossParent;
 
+    [Header("Interface e Regras")]
+    public float tempoDeFase = 60f; 
+    public int pontuacao = 0;
+    public TextMeshProUGUI textoTempo; 
+    public TextMeshProUGUI textoPontuacao; 
+
     private GameObject backgroundInstance;
     private GameObject bossInstance;
+
+    void Awake()
+    {
+        // Configura a porta de entrada assim que o jogo começa
+        if (instance == null) instance = this;
+        else Destroy(gameObject);
+    }
 
     void Start()
     {
         LoadFase(faseAtual);
+        AtualizarUI();
+    }
+
+    void Update()
+    {
+        if (tempoDeFase > 0)
+        {
+            tempoDeFase -= Time.deltaTime;
+            AtualizarUI();
+        }
+        else
+        {
+            tempoDeFase = 0;
+        }
+    }
+
+    public void AdicionarPontos(int pontos)
+    {
+        pontuacao += pontos;
+        AtualizarUI();
+    }
+
+    void AtualizarUI()
+    {
+        if (textoTempo != null) textoTempo.text = "Tempo: " + Mathf.CeilToInt(tempoDeFase).ToString();
+        if (textoPontuacao != null) textoPontuacao.text = "Pontos: " + pontuacao;
     }
 
     public void LoadFase(FaseConfig fase)
@@ -24,34 +67,19 @@ public class LevelManager : MonoBehaviour
             return;
         }
 
-        // Limpa fase anterior
         if (backgroundInstance != null) Destroy(backgroundInstance);
         if (bossInstance != null) Destroy(bossInstance);
 
         faseAtual = fase;
 
-        // Instancia Background
         if (fase.backgroundPrefab != null)
         {
-            backgroundInstance = Instantiate(
-                fase.backgroundPrefab,
-                backgroundParent.position,
-                Quaternion.identity,
-                backgroundParent
-            );
+            backgroundInstance = Instantiate(fase.backgroundPrefab, backgroundParent.position, Quaternion.identity, backgroundParent);
         }
 
-        // Instancia Boss
         if (fase.bossPrefab != null)
         {
-            bossInstance = Instantiate(
-                fase.bossPrefab,
-                bossParent.position,
-                Quaternion.identity,
-                bossParent
-            );
-
-            // Configura o Boss
+            bossInstance = Instantiate(fase.bossPrefab, bossParent.position, Quaternion.identity, bossParent);
             BossShooter shooter = bossInstance.GetComponent<BossShooter>();
 
             if (shooter != null)
@@ -62,7 +90,5 @@ public class LevelManager : MonoBehaviour
                 shooter.shootInterval = fase.shootInterval;
             }
         }
-
-        Debug.Log("Fase carregada: " + fase.nomeDaFase);
     }
 }
