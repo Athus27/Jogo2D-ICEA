@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 6221748}
   m_Layer: 0
   m_Name: r_limit
-  m_TagString: Untagged
+  m_TagString: Limites
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -461,7 +461,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: -4373184736405950995, guid: 6c16d7681392726488943884a9800c09, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -504,7 +504,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &449735047
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -520,6 +520,10 @@ MonoBehaviour:
   faseAtual: {fileID: 11400000, guid: eed4eea2da0ced047bee0d2c6386383b, type: 2}
   backgroundParent: {fileID: 1882944492}
   bossParent: {fileID: 1534721098}
+  tempoDeFase: 60
+  pontuacao: 0
+  textoTempo: {fileID: 0}
+  textoPontuacao: {fileID: 0}
 --- !u!4 &449735048
 Transform:
   m_ObjectHideFlags: 0
@@ -726,7 +730,7 @@ GameObject:
   - component: {fileID: 592009156}
   m_Layer: 0
   m_Name: l_limit
-  m_TagString: Untagged
+  m_TagString: Limites
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1182,6 +1186,14 @@ MonoBehaviour:
   maxHeight: 4
   timeToPeak: 0.4
   parado: {fileID: 366489581502994730, guid: 7281b6e024c19714a8b132f0f254c725, type: 3}
+  vidaMaxima: 100
+  vidaAtual: 0
+  barraDeVida: {fileID: 0}
+  pontoDeAtaque: {fileID: 0}
+  raioDeAtaque: 0.8
+  camadaProjetil:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!212 &1926491932
 SpriteRenderer:
   serializedVersion: 2

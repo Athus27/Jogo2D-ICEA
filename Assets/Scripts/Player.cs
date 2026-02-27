@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
 
     [Header("Sistema de Ataque")]
     public Transform pontoDeAtaque; // Objeto vazio na frente do jogador
-    public float raioDeAtaque = 0.8f;
+    public float raioDeAtaque = 1.8f;
     public LayerMask camadaProjetil; // Identifica o que o ataque pode acertar
 
     private Rigidbody2D rb;
