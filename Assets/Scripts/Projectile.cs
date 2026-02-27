@@ -29,7 +29,6 @@ public class Projectile : MonoBehaviour
         // Verifica se o projétil colidiu com o limite
         if (collision.gameObject.CompareTag("Limites"))
         {
-            // Destruir o projétil ou qualquer outra ação
             Destroy(gameObject); // Destroi o projétil ao bater no limite
         }
     }

@@ -4,8 +4,8 @@ using UnityEngine;
 public class FaseConfig : ScriptableObject
 {
     [Header("Visual da fase")]
-    public GameObject backgroundPrefab;   // ou Sprite se preferir simples
-    public Transform spawnBackground;      // opcional (pode ser nulo)
+    public GameObject backgroundPrefab;
+    public Transform spawnBackground;
 
     [Header("Boss e ataque")]
     public GameObject bossPrefab;

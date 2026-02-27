@@ -18,8 +18,7 @@ public class FundoInfinito : MonoBehaviour
         // Se a imagem ficou totalmente para trás da visão da câmera...
         if (distanciaDaCamera > larguraImagem * 1.5f) 
         {
-            // Ela dá um "pulo" lá para a frente!
-            // Como são 3 imagens no total, ela salta exatamente a distância de 3 imagens.
+            //Adiciona a proxima imagem do loop
             transform.position += new Vector3(larguraImagem * 3f, 0, 0);
         }
     }

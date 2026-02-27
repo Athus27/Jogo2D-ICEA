@@ -102,8 +102,7 @@ public class Player : MonoBehaviour
 
         if (audioSource != null && somAtaque != null)
         {
-            // Usamos PlayOneShot porque ele permite tocar vários sons por cima 
-            // uns dos outros (se você apertar J muito rápido, o som não corta o anterior)
+            //toca som de ataque
             audioSource.PlayOneShot(somAtaque); 
         }
 
@@ -143,7 +142,7 @@ public class Player : MonoBehaviour
             }
         }
 
-        // Adiciona a velocidade da tela no jogador!
+        // Adiciona a velocidade da tela no jogador
         rb.linearVelocity = new Vector2((moveX * speed) + velocidadeFase, rb.linearVelocity.y);
     }
 
