@@ -1,25 +1,34 @@
 using UnityEngine;
-using UnityEngine.UI; // Necessário para a barra de vida (Slider)
+using UnityEngine.UI; 
 
 public class Player : MonoBehaviour
 {
     public float speed = 5f;
+    [Header("Nova Velocidade Automática")]
+    public float velocidadeFase = 3f; // Faz o personagem andar com a câmera!
+
     [Header("Configurações do Pulo")]
     public float maxHeight = 1f;
     public float timeToPeak = 0.4f;
 
-    [Header("Sprites")]
+    [Header("Sprites e Animação")]
     public Sprite parado;
+    public Sprite[] framesAtaque; 
+    public float tempoPorFrame = 0.08f; 
 
     [Header("Sistema de Vida")]
     public int vidaMaxima = 100;
     public int vidaAtual;
-    public Slider barraDeVida; // Arraste o Slider da tela (Canvas) aqui
+    public Slider barraDeVida; 
 
     [Header("Sistema de Ataque")]
-    public Transform pontoDeAtaque; // Objeto vazio na frente do jogador
-    public float raioDeAtaque = 1.8f;
-    public LayerMask camadaProjetil; // Identifica o que o ataque pode acertar
+    public Transform pontoDeAtaque; 
+    public float raioDeAtaque = 0.8f;
+    public LayerMask camadaProjetil; 
+
+    [Header("Sons")]
+    public AudioSource audioSource;
+    public AudioClip somAtaque;
 
     private Rigidbody2D rb;
     private SpriteRenderer sr;
@@ -27,6 +36,10 @@ public class Player : MonoBehaviour
     private bool isGrounded;
     private float gravity;
     private float jumpSpeed;
+
+    private bool isAttacking = false;
+    private int frameAtualAtaque = 0;
+    private float attackTimer = 0f;
 
     void Start()
     {
@@ -38,13 +51,27 @@ public class Player : MonoBehaviour
         jumpSpeed = gravity * timeToPeak;
         rb.gravityScale = gravity / 9.81f;
 
-        // Inicia a vida cheia
         vidaAtual = vidaMaxima;
         AtualizarBarraDeVida();
     }
 
     void Update()
     {
+        if (isAttacking)
+        {
+            attackTimer -= Time.deltaTime;
+            if (attackTimer <= 0)
+            {
+                frameAtualAtaque++; 
+                if (frameAtualAtaque < framesAtaque.Length)
+                {
+                    sr.sprite = framesAtaque[frameAtualAtaque]; 
+                    attackTimer = tempoPorFrame; 
+                }
+                else isAttacking = false; 
+            }
+        }
+
         MovePlayer();
 
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
@@ -52,8 +79,7 @@ public class Player : MonoBehaviour
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpSpeed);
         }
 
-        // Lógica de Ataque (Botão J ou clique esquerdo)
-        if (Input.GetKeyDown(KeyCode.J) || Input.GetButtonDown("Fire1"))
+        if ((Input.GetKeyDown(KeyCode.J) || Input.GetButtonDown("Fire1")) && !isAttacking)
         {
             Atacar();
         }
@@ -61,31 +87,30 @@ public class Player : MonoBehaviour
 
     void Atacar()
     {
+        if (framesAtaque == null || framesAtaque.Length == 0) return;
+
+        isAttacking = true;
+        frameAtualAtaque = 0;
+        attackTimer = tempoPorFrame;
+
+        anim.enabled = false;
+        sr.sprite = framesAtaque[0]; 
+
         if (pontoDeAtaque == null) return;
 
-        // Desenha um círculo invisível que pega tudo que está na camada do projétil
         Collider2D[] projeteisAtingidos = Physics2D.OverlapCircleAll(pontoDeAtaque.position, raioDeAtaque, camadaProjetil);
+
+        if (audioSource != null && somAtaque != null)
+        {
+            // Usamos PlayOneShot porque ele permite tocar vários sons por cima 
+            // uns dos outros (se você apertar J muito rápido, o som não corta o anterior)
+            audioSource.PlayOneShot(somAtaque); 
+        }
 
         foreach (Collider2D projetil in projeteisAtingidos)
         {
-            Destroy(projetil.gameObject); // Destrói o projétil inimigo
-            
-            // Avisa o LevelManager para aumentar a pontuação
-            if (LevelManager.instance != null)
-            {
-                LevelManager.instance.AdicionarPontos(10);
-                Debug.Log("Projétil destruído! +10 Pontos");
-            }
-        }
-    }
-
-    // Desenha uma linha vermelha no Editor para ver o tamanho do ataque
-    private void OnDrawGizmosSelected()
-    {
-        if (pontoDeAtaque != null)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(pontoDeAtaque.position, raioDeAtaque);
+            Destroy(projetil.gameObject); 
+            if (LevelManager.instance != null) LevelManager.instance.AdicionarPontos(10); 
         }
     }
 
@@ -97,35 +122,38 @@ public class Player : MonoBehaviour
         {
             moveX = -1;
             sr.flipX = false; 
+            if (pontoDeAtaque != null) 
+                pontoDeAtaque.localPosition = new Vector3(-Mathf.Abs(pontoDeAtaque.localPosition.x), pontoDeAtaque.localPosition.y, 0);
         }
         else if (Input.GetKey(KeyCode.D))
         {
             moveX = 1;
             sr.flipX = true; 
+            if (pontoDeAtaque != null) 
+                pontoDeAtaque.localPosition = new Vector3(Mathf.Abs(pontoDeAtaque.localPosition.x), pontoDeAtaque.localPosition.y, 0);
         }
 
-        if (moveX != 0) anim.enabled = true;
-        else
+        if (!isAttacking)
         {
-            anim.enabled = false;
-            sr.sprite = parado;
+            if (moveX != 0) anim.enabled = true;
+            else
+            {
+                anim.enabled = false;
+                sr.sprite = parado;
+            }
         }
 
-        rb.linearVelocity = new Vector2(moveX * speed, rb.linearVelocity.y);
+        // Adiciona a velocidade da tela no jogador!
+        rb.linearVelocity = new Vector2((moveX * speed) + velocidadeFase, rb.linearVelocity.y);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Chao"))
-        {
-            isGrounded = true;
-        }
-        
-        // Se bater no projétil (e não tiver defendido antes)
+        if (collision.gameObject.CompareTag("Chao")) isGrounded = true;
         if (collision.gameObject.CompareTag("Projetil"))
         {
             Destroy(collision.gameObject);  
-            ReceberDano(20); // Perde 20 de vida
+            ReceberDano(20); 
         }
     }
 
@@ -133,15 +161,8 @@ public class Player : MonoBehaviour
     {
         vidaAtual -= dano;
         if (vidaAtual < 0) vidaAtual = 0;
-        
         AtualizarBarraDeVida();
-        Debug.Log("Player tomou dano! Vida atual: " + vidaAtual);
-
-        if (vidaAtual <= 0)
-        {
-            Debug.Log("Game Over!");
-            gameObject.SetActive(false); // Esconde o jogador (morreu)
-        }
+        if (vidaAtual <= 0) gameObject.SetActive(false); 
     }
 
     void AtualizarBarraDeVida()
@@ -155,9 +176,6 @@ public class Player : MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Chao"))
-        {
-            isGrounded = false;
-        }
+        if (collision.gameObject.CompareTag("Chao")) isGrounded = false;
     }
 }

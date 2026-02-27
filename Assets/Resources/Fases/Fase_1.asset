@@ -15,8 +15,8 @@ MonoBehaviour:
   backgroundPrefab: {fileID: 8614248916830777152, guid: 4d4ebe532dfb9b44dab3c9d8dc82f087, type: 3}
   spawnBackground: {fileID: 0}
   bossPrefab: {fileID: 45892298746069078, guid: b054f1899a3c1b7468787fb29d8b4c48, type: 3}
-  projectilePrefab: {fileID: 0}
-  projectileSprite: {fileID: 0}
-  projectileSpeed: 8
-  shootInterval: 0.2
+  projectilePrefab: {fileID: 2253508658202030243, guid: 86f1d76d9241a024ea460ff127e659b0, type: 3}
+  projectileSprite: {fileID: -902982901966222709, guid: 97510c217308ddb408993d23335c5950, type: 3}
+  projectileSpeed: 2
+  shootInterval: 1.5
   nomeDaFase: Fase

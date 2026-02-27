@@ -36,15 +36,9 @@ public class LevelManager : MonoBehaviour
 
     void Update()
     {
-        if (tempoDeFase > 0)
-        {
-            tempoDeFase -= Time.deltaTime;
-            AtualizarUI();
-        }
-        else
-        {
-            tempoDeFase = 0;
-        }
+        // Ao invés de diminuir (-=), agora o tempo aumenta (+=) infinitamente!
+        tempoDeFase += Time.deltaTime;
+        AtualizarUI();
     }
 
     public void AdicionarPontos(int pontos)

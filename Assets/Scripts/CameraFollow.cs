@@ -2,46 +2,12 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
-    public Transform Player;
-    public SpriteRenderer cenario;
+    [Header("Configuração de Velocidade")]
+    public float velocidadeFase = 3f; // A velocidade que a tela vai se mover para a direita
 
-    private float minX, maxX, minY, maxY;
-    private float camHalfWidth, camHalfHeight;
-
-    void Start()
+    void Update()
     {
-        if (cenario != null)
-        {
-            Bounds limites = cenario.bounds;
-
-            minX = limites.min.x;
-            maxX = limites.max.x;
-            minY = limites.min.y;
-            maxY = limites.max.y;
-        }
-
-        Camera cam = GetComponent<Camera>();
-
-        camHalfHeight = cam.orthographicSize;
-        camHalfWidth = camHalfHeight * cam.aspect;
-    }
-
-    void LateUpdate()
-    {
-        if (Player == null) return;
-
-        Vector3 novaPosicao = transform.position;
-
-        // X
-        float limiteMinX = minX + camHalfWidth;
-        float limiteMaxX = maxX - camHalfWidth;
-        novaPosicao.x = Mathf.Clamp(Player.position.x, limiteMinX, limiteMaxX);
-
-        // Y
-        float limiteMinY = minY + camHalfHeight;
-        float limiteMaxY = maxY - camHalfHeight;
-        novaPosicao.y = Mathf.Clamp(Player.position.y + 1f, limiteMinY, limiteMaxY);
-
-        transform.position = novaPosicao;
+        // A câmera anda para a direita sozinha infinitamente
+        transform.position += Vector3.right * velocidadeFase * Time.deltaTime;
     }
 }
