@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
@@ -7,6 +8,9 @@ public class LevelManager : MonoBehaviour
     public static LevelManager instance; 
 
     public FaseConfig faseAtual;
+
+    private Player player; // Referência para pegar a vida
+    private int pontuacaoAtual;
 
     [Header("Onde spawnar coisas")]
     public Transform backgroundParent;
@@ -30,13 +34,13 @@ public class LevelManager : MonoBehaviour
 
     void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         LoadFase(faseAtual);
         AtualizarUI();
     }
 
     void Update()
     {
-        // Ao invés de diminuir (-=), agora o tempo aumenta (+=) infinitamente!
         tempoDeFase += Time.deltaTime;
         AtualizarUI();
     }

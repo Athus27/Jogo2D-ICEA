@@ -456,6 +456,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelManager
   faseAtual: {fileID: 11400000, guid: eed4eea2da0ced047bee0d2c6386383b, type: 2}
+  gameOver: {fileID: 0}
+  vitory: {fileID: 0}
   backgroundParent: {fileID: 1067254055}
   bossParent: {fileID: 719335600}
   tempoDeFase: 60
