@@ -127,10 +127,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6221751}
-  - component: {fileID: 6221750}
-  - component: {fileID: 6221749}
-  - component: {fileID: 6221748}
+  - component: {fileID: 125404959}
+  - component: {fileID: 125404961}
+  - component: {fileID: 125404960}
   m_Layer: 0
   m_Name: r_limit
   m_TagString: Limites
@@ -443,7 +442,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &449735047
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -457,12 +456,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelManager
   faseAtual: {fileID: 11400000, guid: eed4eea2da0ced047bee0d2c6386383b, type: 2}
-  backgroundParent: {fileID: 1882944492}
-  bossParent: {fileID: 1534721098}
+  backgroundParent: {fileID: 1067254055}
+  bossParent: {fileID: 719335600}
   tempoDeFase: 60
   pontuacao: 0
-  textoTempo: {fileID: 0}
-  textoPontuacao: {fileID: 0}
+  textoTempo: {fileID: 125404960}
+  textoPontuacao: {fileID: 1513667990}
 --- !u!4 &449735048
 Transform:
   m_ObjectHideFlags: 0
